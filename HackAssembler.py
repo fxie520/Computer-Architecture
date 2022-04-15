@@ -1,4 +1,5 @@
 import re
+import os
 
 if __name__ == '__main__':
     dest_table = {
@@ -81,15 +82,79 @@ if __name__ == '__main__':
         "THAT": "4",
     }
 
-    assembly_file = "./add/Add.asm"
+    file_name = "Pong"
+    assembly_file = "./assembly_files/" + file_name + ".asm"
+    temp_file = "./temp.asm"
+    output_file = "./machine_code_files/" + file_name + ".hack"
 
     # First pass: remove all comments, blank lines & indentations
     with open(assembly_file, 'r') as f:
         lines = f.readlines()
-    with open(assembly_file, 'w') as f:
+    with open(temp_file, 'w') as f:
         for line in lines:
             # Remove all comments & indentations
             line_to_write = re.sub('//.*$', '', line.strip(' '))
             # Remove blank lines
             if line_to_write != '\n':
                 f.write(line_to_write)
+
+    # Second pass: add labels to the symbol table
+    with open(temp_file, 'r') as f:
+        lines = f.readlines()
+    line_count = 0
+    with open(temp_file, 'w') as f:
+        for line in lines:
+            match = re.match(r'\(.+\)', line)
+            # If label presents
+            if match:
+                # label without parentheses
+                label = line[match.span()[0]+1:match.span()[1]-1]
+                # Assembly code is supposed to be correct, so label must not be re-declared
+                symbol_table[label] = str(line_count)
+            else:
+                f.write(line)
+                line_count += 1
+
+    # Third pass: translate the entire program
+    with open(temp_file, 'r') as f:
+        lines = f.readlines()
+    var_pos_in_RAM = 16  # Variable position in RAM
+    with open(output_file, 'w') as out_file:
+        for line in lines:
+            # A-instruction
+            if line.startswith('@'):
+                value = line.strip()[1:]  # Strip new line character and the "@" symbol
+                # If value is non-numeric, i.e. a variable
+                if not re.fullmatch('^[0-9]+$', value):
+                    # If variable already declared
+                    if value in symbol_table:
+                        value = symbol_table[value]
+                    # Declare new variable
+                    else:
+                        symbol_table[value] = var_pos_in_RAM
+                        value = var_pos_in_RAM
+                        var_pos_in_RAM += 1
+                value = bin(int(value)).replace("0b", "")  # Decimal to binary
+                instr = "0"*(16 - len(value)) + value  # Add leading zeros so that the instruction has 16 characters
+            # C-instruction
+            else:
+                line = line.strip()  # Strip new line character
+                pos_equal_sign = line.find('=')
+                pos_semi_colon = line.find(';')
+                # If the equal sign is found, i.e. destination exists
+                if pos_equal_sign >= 0:
+                    dest = dest_table[line[:pos_equal_sign]]
+                else:
+                    dest = "000"
+                # If the semicolon sign is found, i.e. jump exists
+                if pos_semi_colon >= 0:
+                    jump = jump_table[line[pos_semi_colon + 1:]]
+                    comp = comp_table[line[pos_equal_sign + 1:pos_semi_colon]]
+                else:
+                    jump = "000"
+                    comp = comp_table[line[pos_equal_sign + 1:]]
+                instr = "111" + comp + dest + jump
+            out_file.write(instr + '\n')
+
+    # Remove the temporary file
+    os.system("rm temp.asm")
