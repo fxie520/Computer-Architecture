@@ -1,6 +1,6 @@
 import re
 
-if __name__ == "main":
+if __name__ == '__main__':
     dest_table = {
         "M": "001",
         "D": "010",
@@ -81,8 +81,15 @@ if __name__ == "main":
         "THAT": "4",
     }
 
-    assembly = "./add/Add.asm"
-    # First pass: remove all comments, blank lines & indentations
-    with open(assembly, 'r+') as assembly_file:
-        for line in assembly_file:
+    assembly_file = "./add/Add.asm"
 
+    # First pass: remove all comments, blank lines & indentations
+    with open(assembly_file, 'r') as f:
+        lines = f.readlines()
+    with open(assembly_file, 'w') as f:
+        for line in lines:
+            # Remove all comments & indentations
+            line_to_write = re.sub('//.*$', '', line.strip(' '))
+            # Remove blank lines
+            if line_to_write != '\n':
+                f.write(line_to_write)
