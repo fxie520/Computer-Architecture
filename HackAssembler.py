@@ -82,10 +82,13 @@ if __name__ == '__main__':
         "THAT": "4",
     }
 
-    file_name = "Pong"
-    assembly_file = "./assembly_files/" + file_name + ".asm"
+    file_name = "Rect"
+    assert file_name in ["Add", "Pong", "Max", "Rect"]
+    assembly_file = "./06/" + file_name.lower() + "/" + file_name + ".asm"
     temp_file = "./temp.asm"
-    output_file = "./machine_code_files/" + file_name + ".hack"
+    # Create directory if not exists
+    os.system("[ -d 06/machine_code_files ] || mkdir 06/machine_code_files")
+    output_file = "./06/machine_code_files/" + file_name + ".hack"
 
     # First pass: remove all comments, blank lines & indentations
     with open(assembly_file, 'r') as f:
