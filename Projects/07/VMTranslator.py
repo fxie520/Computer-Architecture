@@ -90,7 +90,8 @@ def load_var_to_R13(memory_segment: str, var_id: str) -> str:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_vm_file", default=None, type=str, required=True, help="Path to *.vm file")
+    # Positional argument
+    parser.add_argument("input_vm_file", default=None, type=str, help="Path to *.vm file")
     args = parser.parse_args()
 
     # Get file name, i.e. *.vm without path
