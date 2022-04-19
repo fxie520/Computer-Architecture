@@ -112,7 +112,6 @@ if __name__ == '__main__':
             if match:
                 # label without parentheses
                 label = line[match.span()[0]+1:match.span()[1]-1]
-                # Value corresponds to label initialized or updated (label re-declared)
                 symbol_table[label] = str(line_count)
             else:
                 f.write(line)
