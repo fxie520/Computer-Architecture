@@ -3,7 +3,7 @@ import argparse
 
 
 # If D [operation] 0, then M=true, else M=false
-# noinspection PyPep8Naming
+# noinspection PyPep8Naming,DuplicatedCode
 def compare_D_to_0(operation: str) -> str:
     assert operation in {"JEQ", "JGT", "JLT"}, "Operation name error"
     return "@TRUE" + str(label_counter) + "\n" + \
@@ -19,6 +19,7 @@ def compare_D_to_0(operation: str) -> str:
 
 
 # D = SP--, D = *SP
+# noinspection DuplicatedCode
 mv_stack_top_to_D = "@SP\n" + \
                     "AM=M-1\n" + \
                     "D=M\n"
@@ -43,7 +44,7 @@ base_address_pointers = {
 }
 
 
-# noinspection PyPep8Naming
+# noinspection PyPep8Naming,DuplicatedCode
 def load_var_to_D(memory_segment: str, var_id: str, f_name: str) -> str:
     assert memory_segment in {"constant", "local", "argument", "this", "that", "temp", "static", "pointer"}, \
         "Operation name error"
@@ -99,6 +100,7 @@ if __name__ == '__main__':
     file_name = args.input_vm_file[match.span()[0]:match.span()[1]]
 
     # Command types
+    # noinspection DuplicatedCode
     arithmetic_logical_cmds = {"add", "sub", "neg", "eq", "gt", "lt", "and", "or", "not"}
     memory_segment_cmds = {"push", "pop"}
 
