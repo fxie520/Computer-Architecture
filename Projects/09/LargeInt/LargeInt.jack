@@ -1,0 +1,167 @@
+/** Abstraction of large (i.e. more than 16 bits) integers,
+which cannot be handled by the built-in int class. */
+
+class LargeInt {
+
+    /** Each LargeInt is represented by an array of arrays of length 4,
+        which represents each a 4-digit block of LargeInt.
+        When the length of LargeInt is not a multiple of 4,
+        the leftmost inner array will be:
+        nb_zeros zeros followed by (4 - nb_zeros) significant digits. */
+
+    field Array a;
+    // Length, i.e. number of digits of large int, the minus sign does not count
+    field int length;
+    // Number of 4-digit blocks
+    field int nb_blocks;
+    // Number of zeros at the beginning of the first inner array
+    field int nb_zeros;
+    // Sign, i.e. positive (true) or negative (false)
+    field boolean sign;
+
+    constructor LargeInt new(String s) {
+        var int i;
+        var int j;
+        var int digit;
+        var char first_char;
+        var Array inner;
+        let digit = 0;
+
+        // Determine sign
+        let sign = true;
+        let first_char = s.charAt(0);
+        if (first_char = 45) { // The minus sign
+            let sign = false;
+        }
+
+        // Determine length, nb_blocks and nb_zeros
+        if (sign) {
+            let length = s.length();
+        }
+        else {
+            let length = s.length() - 1;
+        }
+        let nb_blocks = length / 4;
+        if (length - (nb_blocks * 4) > 0) {
+            let nb_blocks = nb_blocks + 1;
+        }
+        let nb_zeros = 4 * nb_blocks - length;
+
+        let a = Array.new(nb_blocks);
+
+        let i = 0;
+        while (i < nb_blocks) {
+            let inner = Array.new(4);
+            let j = 0;
+            // For the 1st block, add zeros in the front first
+            if (i = 0) {
+                while (j < nb_zeros) {
+                    let inner[j] = 0;
+                    let j = j + 1;
+                }
+            }
+            while (j < 4) {
+                // Get corresponding character then converts it to integer
+                if (sign) {
+                    let digit = s.charAt(4 * i + j - nb_zeros) - 48;
+                }
+                else {
+                    let digit = s.charAt(4 * i + j - nb_zeros + 1) - 48;
+                }
+                let inner[j] = digit;
+                let j = j + 1;
+            }
+            let a[i] = inner;
+            let i = i + 1;
+        }
+        return this;
+    }
+
+    constructor LargeInt new2(Array Arr, int n_blocks, boolean LargeIntSign) {
+        var boolean continue;
+        var int i;
+        var int block_nb;
+        var int digit_nb;
+        var Array inner;
+
+        let sign = LargeIntSign;
+
+        // Count leading zeros
+        let nb_zeros = 0;
+        let i = 0;
+        let continue = true;
+        while ((i < (n_blocks * 4)) & continue) {
+            let block_nb = i / 4;
+            let digit_nb = i - (block_nb * 4);  // Digit number inside a block, i.e. 0 - 3
+            let inner = Arr[block_nb];
+            if (inner[digit_nb] = 0) {
+                let nb_zeros = nb_zeros + 1;
+            }
+            else {
+                let continue = false;
+            }
+            let i = i + 1;
+        }
+
+        // If first block is 0000, remove it.
+        if (nb_zeros > 3) {
+            let nb_blocks = n_blocks - 1;
+            let nb_zeros = nb_zeros - 4;
+            let a = Array.new(nb_blocks);
+            let i = 0;
+            while (i < nb_blocks) {
+                let a[i] = Arr[i + 1];
+                let i = i + 1;
+            }
+        }
+        else {
+            let nb_blocks = n_blocks;
+            let a = Arr;
+        }
+
+        // Compute length
+        let length = nb_blocks * 4 - nb_zeros;
+
+        return this;
+    }
+
+    method void dispose() {
+        do a.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void print() {
+        var int i;
+        var int j;
+        var Array inner;
+        // Print sign
+        if (~sign) {
+            do Output.printChar(45); // The minus sign
+        }
+
+        // Print absolute value
+        let i = 0;
+        while (i < nb_blocks) {
+            let j = 0;
+            // Do not print the leading zeros
+            if (i = 0) {
+                while (j < nb_zeros) {
+                    let j = j + 1;
+                }
+            }
+            while (j < 4) {
+                let inner = a[i];
+                do Output.printInt(inner[j]);
+                let j = j + 1;
+            }
+            let i = i + 1;
+        }
+        return;
+    }
+
+    method int getNbBlocks() {return nb_blocks;}
+    method int getLength() {return length;}
+    method int getNbZeros() {return nb_zeros;}
+    method Array getArray() {return a;}
+}
