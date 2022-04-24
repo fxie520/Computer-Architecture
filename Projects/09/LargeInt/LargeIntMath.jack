@@ -26,7 +26,7 @@ class LargeIntMath {
 
         while (block_counter_res > -1) {
 
-            // Compute resulting block's value and update carry
+            // Compute i1 block value
             let i1_block_val = 0;
             if (block_counter_1 > -1) {
                 let i1_block = i1_array[block_counter_1];
@@ -38,6 +38,7 @@ class LargeIntMath {
                 }
             }
 
+            // Compute i2 block value
             let i2_block_val = 0;
             if (block_counter_2 > -1) {
                 let i2_block = i2_array[block_counter_2];
@@ -48,8 +49,9 @@ class LargeIntMath {
                     let i2_block_val = - (1000 * i2_block[0]) - (100 * i2_block[1]) - (10 * i2_block[2]) - i2_block[3];
                 }
             }
-            let res_block_val = i1_block_val + i2_block_val + carry;
 
+            // Compute result block value
+            let res_block_val = i1_block_val + i2_block_val + carry;
             if (res_block_val > 9999) {
                 let carry = 1;
                 let res_block_val = res_block_val - 10000;
@@ -79,6 +81,58 @@ class LargeIntMath {
         }
 
         return LargeInt.new2(res_array, max_nb_blocks + 1, true);
+    }
+
+    // Returns true if |i1| > |i2|, else return false
+    function boolean compareAbsolute(LargeInt i1, LargeInt i2) {
+        var int i1_length, i2_length;
+        var int nb_zeros;
+        var int nb_blocks;
+        var int i, j;
+        var Array i1_inner, i2_inner;  // Inner arrays
+        var Array i1_array, i2_array;
+
+        // i1 and i2 are not equally long
+        let i1_length = i1.getLength();
+        let i2_length = i2.getLength();
+        if (i1_length > i2_length) {
+            return true;
+        }
+        if (i2_length > i1_length) {
+            return false;
+        }
+
+        // i1 and i2 are equally long
+        let i = 0;
+        let nb_zeros = i1.getNbZeros();  // Common number of zeros
+        let nb_blocks = i1.getNbBlocks();  // Common number of blocks
+        let i1_array = i1.getArray();
+        let i2_array = i2.getArray();
+        while (i < nb_blocks) {
+            let j = 0;
+            // For the 1st block, ignore zeros in the front first
+            if (i = 0) {
+                while (j < nb_zeros) {
+                    let j = j + 1;
+                }
+            }
+            while (j < 4) {
+                let i1_inner = i1_array[i];
+                let i2_inner = i2_array[i];
+                if (i1_inner[j] > i2_inner[j]) {
+                    return true;
+                }
+                if (i2_inner[j] > i1_inner[j]) {
+                    return false;
+                }
+                // Continue if both number have the same digit
+                let j = j + 1;
+            }
+            let i = i + 1;
+        }
+
+        // |i1| = |i2| if we reach here
+        return false;
     }
 }
 

@@ -1,22 +1,88 @@
+/** Computes the sum of two arbitrarily large integers */
+
 class Main{
     function void main() {
         var String s1, s2;
         var LargeInt i1, i2, result;
+        var boolean i1_sign, i2_sign, res_sign;
+        var char key;
 
-        let s1 = Keyboard.readLine("Enter an arbitrarily large int i1: ");
-        let i1 = LargeInt.new(s1);
-        do i1.print();
-        do Output.println();
-        let s2 = Keyboard.readLine("Enter an arbitrarily large int i2: ");
-        let i2 = LargeInt.new(s2);
-        do i2.print();
-        do Output.println();
-        let result = LargeIntMath.plus(i1, i2);
-        do result.print();
+        while (true) {
+            // Initialization
+            do Screen.clearScreen();
+            do Output.moveCursor(0, 0);
+            do Output.printString("Sums 2 arbitrarily large ints (positive or negative).");
+            do Output.println(); do Output.println();
 
-        do i1.dispose();
-        do i2.dispose();
-        do result.dispose();
+            // Read first LargeInt
+            let s1 = Keyboard.readLine("Enter int1: ");
+            let i1 = LargeInt.new(s1);
+            let i1_sign = i1.getSign();
+            do Output.println();
+
+            // Read second LargeInt
+            let s2 = Keyboard.readLine("Enter int2: ");
+            let i2 = LargeInt.new(s2);
+            let i2_sign = i2.getSign();
+            do Output.println();
+
+            // Calculate sum
+            // If both positive
+            if (i1_sign & i2_sign) {
+                let result = LargeIntMath.plus(i1, i2);
+            }
+            // If both negative
+            if ((~i1_sign) & (~i2_sign)) {
+                do i1.setSign(true);
+                do i2.setSign(true);
+                let result = LargeIntMath.plus(i1, i2);
+                do result.setSign(false);
+            }
+            // If one positive and one negative
+            if ((~i1_sign) & (i2_sign)) {
+                if (LargeIntMath.compareAbsolute(i1, i2)) {
+                    do i1.setSign(~i1_sign);
+                    do i2.setSign(~i2_sign);
+                    let result = LargeIntMath.plus(i1, i2);
+                    let res_sign = result.getSign();
+                    do result.setSign(~res_sign);
+                }
+                else {
+                    let result = LargeIntMath.plus(i1, i2);
+                }
+            }
+            if ((i1_sign) & (~i2_sign)) {
+                if (LargeIntMath.compareAbsolute(i2, i1)) {
+                    do i1.setSign(~i1_sign);
+                    do i2.setSign(~i2_sign);
+                    let result = LargeIntMath.plus(i1, i2);
+                    let res_sign = result.getSign();
+                    do result.setSign(~res_sign);
+                }
+                else {
+                    let result = LargeIntMath.plus(i1, i2);
+                }
+            }
+
+            // Print result
+            do Output.printString("i1 + i2 = "); do result.print(); do Output.println();
+
+            // Recycle memory
+            do i1.dispose();
+            do i2.dispose();
+            do result.dispose();
+
+            // Quit or continue
+            do Output.println(); do Output.printString("Press q to quit, or c to continue");
+            let key = 0;
+            while ((~(key = 81)) & (~(key = 67))) {
+                let key = Keyboard.readChar();
+            }
+            if (key = 81) {  // Quit if letter Q is pressed
+                return;
+            }
+        }
+
         return;
     }
 }

@@ -157,12 +157,22 @@ class LargeInt {
             }
             let i = i + 1;
         }
+
+        // If LargeInt's value is 0000
+        let inner = a[0];
+        if ((inner[0] = 0) & (inner[1] = 0) & (inner[2] = 0) & (inner[3] = 0) & (nb_blocks = 1)) {
+            do Output.printInt(0);
+        }
         return;
     }
 
+    // Get methods
     method int getNbBlocks() {return nb_blocks;}
     method int getLength() {return length;}
     method int getNbZeros() {return nb_zeros;}
     method Array getArray() {return a;}
     method boolean getSign() {return sign;}
+
+    // Set methods
+    method void setSign(boolean new_sign) {let sign = new_sign; return;}
 }
