@@ -1,21 +1,24 @@
 /** Common math operations between LargeInts */
 
 class LargeIntMath {
-    // Calculates i1 + i2 where i1 >= 0 and i2 >= 0
+    // Calculates i1 + i2 when i1 + i2 >= 0
     function LargeInt plus(LargeInt i1, LargeInt i2) {
 
+        var boolean i1_sign, i2_sign;
         var int max_nb_blocks;
         var int block_counter_1, block_counter_2, block_counter_res;
+        var int i1_block_val, i2_block_val, res_block_val;
+        var int carry;  // carry = 0 or 1 or -1
         var Array i1_array, i2_array, res_array;
         var Array i1_block, i2_block, res_block;
-        var int i1_block_val, i2_block_val, res_block_val;
-        var int carry;  // carry = 0 or 1
 
         // Computation: from the rightmost block to the leftmost block
         let max_nb_blocks = Math.max(i1.getNbBlocks(), i2.getNbBlocks());
         let res_array = Array.new(max_nb_blocks + 1);
         let i1_array = i1.getArray();
         let i2_array = i2.getArray();
+        let i1_sign = i1.getSign();
+        let i2_sign = i2.getSign();
         let block_counter_1 = i1.getNbBlocks() - 1;
         let block_counter_2 = i2.getNbBlocks() - 1;
         let block_counter_res = max_nb_blocks;
@@ -27,13 +30,23 @@ class LargeIntMath {
             let i1_block_val = 0;
             if (block_counter_1 > -1) {
                 let i1_block = i1_array[block_counter_1];
-                let i1_block_val = (1000 * i1_block[0]) + (100 * i1_block[1]) + (10 * i1_block[2]) + i1_block[3];
+                if (i1_sign) {
+                    let i1_block_val = (1000 * i1_block[0]) + (100 * i1_block[1]) + (10 * i1_block[2]) + i1_block[3];
+                }
+                else {
+                    let i1_block_val = - (1000 * i1_block[0]) - (100 * i1_block[1]) - (10 * i1_block[2]) - i1_block[3];
+                }
             }
 
             let i2_block_val = 0;
             if (block_counter_2 > -1) {
                 let i2_block = i2_array[block_counter_2];
-                let i2_block_val = (1000 * i2_block[0]) + (100 * i2_block[1]) + (10 * i2_block[2]) + i2_block[3];
+                if (i2_sign) {
+                    let i2_block_val = (1000 * i2_block[0]) + (100 * i2_block[1]) + (10 * i2_block[2]) + i2_block[3];
+                }
+                else {
+                    let i2_block_val = - (1000 * i2_block[0]) - (100 * i2_block[1]) - (10 * i2_block[2]) - i2_block[3];
+                }
             }
             let res_block_val = i1_block_val + i2_block_val + carry;
 
@@ -42,67 +55,13 @@ class LargeIntMath {
                 let res_block_val = res_block_val - 10000;
             }
             else {
-                let carry = 0;
-            }
-
-            // Convert resulting block's value to array representation
-            let res_block = Array.new(4);
-            let res_block[0] = res_block_val / 1000;
-            let res_block[1] = (res_block_val - (res_block[0] * 1000)) / 100;
-            let res_block[2] = (res_block_val - (res_block[0] * 1000) - (res_block[1] * 100)) / 10;
-            let res_block[3] = res_block_val - (res_block[0] * 1000) - (res_block[1] * 100) - (res_block[2] * 10);
-            let res_array[block_counter_res] = res_block;
-
-            // Update block counters
-            let block_counter_1 = block_counter_1 - 1;
-            let block_counter_2 = block_counter_2 - 1;
-            let block_counter_res = block_counter_res - 1;
-        }
-
-        return LargeInt.new2(res_array, max_nb_blocks + 1, true);
-    }
-
-    // Calculates i1 - i2 where i1 >= 0 and i2 <= 0
-    function LargeInt minus(LargeInt i1, LargeInt i2) {
-        var int max_nb_blocks;
-        var int block_counter_1, block_counter_2, block_counter_res;
-        var Array i1_array, i2_array, res_array;
-        var Array i1_block, i2_block, res_block;
-        var int i1_block_val, i2_block_val, res_block_val;
-        var int carry;  // carry = 0 or 1
-
-        // Computation: from the rightmost block to the leftmost block
-        let max_nb_blocks = Math.max(i1.getNbBlocks(), i2.getNbBlocks());
-        let res_array = Array.new(max_nb_blocks + 1);
-        let i1_array = i1.getArray();
-        let i2_array = i2.getArray();
-        let block_counter_1 = i1.getNbBlocks() - 1;
-        let block_counter_2 = i2.getNbBlocks() - 1;
-        let block_counter_res = max_nb_blocks;
-        let carry = 0;
-
-        while (block_counter_res > -1) {
-
-            // Compute resulting block's value and update carry
-            let i1_block_val = 0;
-            if (block_counter_1 > -1) {
-                let i1_block = i1_array[block_counter_1];
-                let i1_block_val = (1000 * i1_block[0]) + (100 * i1_block[1]) + (10 * i1_block[2]) + i1_block[3];
-            }
-
-            let i2_block_val = 0;
-            if (block_counter_2 > -1) {
-                let i2_block = i2_array[block_counter_2];
-                let i2_block_val = (1000 * i2_block[0]) + (100 * i2_block[1]) + (10 * i2_block[2]) + i2_block[3];
-            }
-            let res_block_val = i1_block_val + i2_block_val + carry;
-
-            if (res_block_val > 9999) {
-                let carry = 1;
-                let res_block_val = res_block_val - 10000;
-            }
-            else {
-                let carry = 0;
+                if (res_block_val < 0) {
+                    let carry = -1;
+                    let res_block_val = res_block_val + 10000;
+                }
+                else {
+                    let carry = 0;
+                }
             }
 
             // Convert resulting block's value to array representation

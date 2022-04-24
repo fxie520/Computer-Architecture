@@ -164,4 +164,5 @@ class LargeInt {
     method int getLength() {return length;}
     method int getNbZeros() {return nb_zeros;}
     method Array getArray() {return a;}
+    method boolean getSign() {return sign;}
 }
