@@ -1,2 +1,2 @@
 # Computer-Architecture
-Projects of the book: "The Elements of Computing Systems"
+Solutions to the book: "The Elements of Computing Systems"
