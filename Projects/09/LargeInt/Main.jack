@@ -8,6 +8,7 @@ class Main{
         var char key;
 
         while (true) {
+
             // Initialization
             do Screen.clearScreen();
             do Output.moveCursor(0, 0);
@@ -26,7 +27,7 @@ class Main{
             let i2_sign = i2.getSign();
             do Output.println();
 
-            // Calculate sum
+            // Calculate sum: split into 3 cases
             // If both positive
             if (i1_sign & i2_sign) {
                 let result = LargeIntMath.plus(i1, i2);
@@ -72,7 +73,7 @@ class Main{
             do i2.dispose();
             do result.dispose();
 
-            // Quit or continue
+            // Prompt: quit or continue
             do Output.println(); do Output.printString("Press q to quit, or c to continue");
             let key = 0;
             while ((~(key = 81)) & (~(key = 67))) {

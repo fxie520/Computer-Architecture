@@ -1,4 +1,4 @@
-/** Common math operations between LargeInts */
+/** Common math operations (addition & comparison of absolute value) between LargeInts */
 
 class LargeIntMath {
     // Calculates i1 + i2 when i1 + i2 >= 0
@@ -131,7 +131,7 @@ class LargeIntMath {
             let i = i + 1;
         }
 
-        // |i1| = |i2| if we reach here
+        // |i1| = |i2| if we reach this line
         return false;
     }
 }

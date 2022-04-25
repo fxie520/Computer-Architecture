@@ -1,13 +1,16 @@
-/** Abstraction of large (i.e. more than 16 bits) integers,
-which cannot be handled by the built-in int class. */
+/** Abstraction of large integers, which cannot be handled by the built-in int class. */
 
 class LargeInt {
 
-    /** Each LargeInt is represented by an array of arrays of length 4,
-        which represents each a 4-digit block of LargeInt.
-        When the length of LargeInt is not a multiple of 4,
-        the leftmost inner array will be:
-        nb_zeros zeros followed by (4 - nb_zeros) significant digits. */
+    /**
+    The absolute value is represented by an array of arrays of length 4,
+    which represents each a 4-digit block of LargeInt.
+    When the length of LargeInt is not a multiple of 4,
+    the leftmost inner array will be:
+    nb_zeros 0s followed by (4 - nb_zeros) significant digits.
+
+    The LargeInt's sign is represented by the sign field.
+    */
 
     field Array a;
     // Length, i.e. number of digits of large int, the minus sign does not count
@@ -19,12 +22,13 @@ class LargeInt {
     // Sign, i.e. positive (true) or negative (false)
     field boolean sign;
 
+    // Constructor 1
     constructor LargeInt new(String s) {
         var int i;
         var int j;
         var int digit;
         var char first_char;
-        var Array inner;
+        var Array inner;  // Inner array
         let digit = 0;
 
         // Determine sign
@@ -77,6 +81,7 @@ class LargeInt {
         return this;
     }
 
+    // Constructor 2
     constructor LargeInt new2(Array Arr, int n_blocks, boolean LargeIntSign) {
         var boolean continue;
         var int i;
@@ -135,6 +140,7 @@ class LargeInt {
         var int i;
         var int j;
         var Array inner;
+
         // Print sign
         if (~sign) {
             do Output.printChar(45); // The minus sign
@@ -158,7 +164,7 @@ class LargeInt {
             let i = i + 1;
         }
 
-        // If LargeInt's value is 0000
+        // If LargeInt's value is 0000, print a single zero
         let inner = a[0];
         if ((inner[0] = 0) & (inner[1] = 0) & (inner[2] = 0) & (inner[3] = 0) & (nb_blocks = 1)) {
             do Output.printInt(0);
