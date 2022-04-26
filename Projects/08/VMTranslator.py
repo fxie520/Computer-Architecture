@@ -202,7 +202,7 @@ if __name__ == '__main__':
     # Parse positional argument
     parser = argparse.ArgumentParser()
     parser.add_argument("input", default=None, type=str,
-                        help="Path to a .vm file or a directory containing at least one .vm files")
+                        help="Path to a .vm file or a directory containing at least one .vm file")
     args = parser.parse_args()
     print(f"Input: {args.input}")
 
