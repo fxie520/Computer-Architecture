@@ -20,7 +20,6 @@ def tokenizer(f_path: str):
             if ignore_line:
                 # If multi-line comment ends in this line
                 if re.search("^.*[*]/", line):
-                    print(f"Asterix type comment ends at line number {nb + 1}")
                     ignore_line = False
                     line = re.sub("^.*[*]/", "", line)
                 else:
@@ -28,10 +27,8 @@ def tokenizer(f_path: str):
             # Remove different types of comments
             line = re.sub('//.*$', '', line)
             if re.search("/[*]", line):
-                print(f"Asterix type comment starts at line number {nb + 1}", end=", ")
                 # /*(*) One line comment */
                 if re.search(r'/\*.*\*/', line):
-                    print(f"Asterix type comment ends at line number {nb + 1}")
                     line = re.sub(r'/\*.*\*/', '', line)
                 # /*(*) multiple line
                 # comment */
@@ -52,6 +49,7 @@ def tokenizer(f_path: str):
             temp.append("\"")
             for symbol in temp:
                 if symbol in line:
+                    # "\\" is not an error even if it is flagged by PyCharm
                     line = re.sub("[ ]*" + "\\" + symbol + r"[ ]*", " " + symbol + " ", line)
                     line = re.sub("\\" + symbol, symbol.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
                                   .replace("\"", "&quot;") + " ", line)
@@ -69,7 +67,7 @@ def tokenizer(f_path: str):
         f.write("<tokens>\n")
         for word in f_content:
             if word != "&quot;" and not is_string:
-                if word in keyword:
+                if word in keywords:
                     f.write("<keyword> " + word + " </keyword>\n")
                 elif (word in symbols) or (word in xml_symbols):
                     f.write("<symbol> " + word + " </symbol>\n")
