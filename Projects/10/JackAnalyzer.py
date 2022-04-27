@@ -31,7 +31,7 @@ if __name__ == '__main__':
     for jack_file in jack_files:
         temp_file = jack_file.replace(".jack", "_temp.xml")
         temp_files.append(temp_file)
-        out_file = jack_file.replace(".jack", "_out.xml")
+        out_file = jack_file.replace(".jack", ".xml")
         out_files.append(out_file)
         tokenizer(jack_file)
 
