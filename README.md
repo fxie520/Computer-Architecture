@@ -1,6 +1,8 @@
 # Computer-Architecture
 Solutions to the book "The Elements of Computing Systems" and the two-part course "From NAND to Tetris: Building a Modern Computer From First Principles" on Coursera. 
 
+**Please be aware that the project content (code provided etc.) can vary slightly as time flies.**
+
 Projects:
 1. Boolean Logic
 2. Boolean Arithmetic
