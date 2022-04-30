@@ -3,6 +3,19 @@ from Utils import *
 from SymbolTable import SymbolTable
 
 
+# Initialization of global variables
+class_symbol_table = SymbolTable()
+subroutine_symbol_table = SymbolTable()
+class_var_kind = ""  # field/static variable
+class_var_type = ""  # int, char, boolean or user-defined type
+class_var_name = ""
+class_name = ""  # Used for function naming in vm code (i.e. class_name.function_name)
+subroutine_name = ""
+subroutine_kind = ""  # constructor, function or method
+subroutine_type = ""  # void, int, char, boolean or user-defined type
+label_counter = 0  # Used for handling flow of control (i.e. if/while)
+
+
 # Write VM code for the entire class which starts at tokens[start_pos + 1]. Governs all following handlers.
 def class_handler(tokens: list, tag_list: list, position: int, output):
     # Reset class-level symbol table
@@ -647,7 +660,7 @@ def term_handler(tokens: list, tag_list: list, position: int, output) -> int:
 # Driver code for debugging the parser only
 if __name__ == '__main__':
     # temp_file = "./Seven/Main_temp.xml"
-    # out_file = "./Seven/Main_out.vm"
+    # out_file = "./Seven/Main.vm"
 
     # temp_file = "./ConvertToBin/Main_temp.xml"
     # out_file = "./ConvertToBin/Main.vm"

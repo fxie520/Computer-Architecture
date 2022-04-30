@@ -29,38 +29,38 @@ push this 1
 push constant 1
 eq
 not
-if-goto label1
+if-goto label13
 push this 0
 call Square.moveUp 1
 pop temp 0
-label label1
+label label13
 push this 1
 push constant 2
 eq
 not
-if-goto label3
+if-goto label15
 push this 0
 call Square.moveDown 1
 pop temp 0
-label label3
+label label15
 push this 1
 push constant 3
 eq
 not
-if-goto label5
+if-goto label17
 push this 0
 call Square.moveLeft 1
 pop temp 0
-label label5
+label label17
 push this 1
 push constant 4
 eq
 not
-if-goto label7
+if-goto label19
 push this 0
 call Square.moveRight 1
 pop temp 0
-label label7
+label label19
 push constant 5
 call Sys.wait 1
 pop temp 0
@@ -71,98 +71,98 @@ push argument 0
 pop pointer 0
 push constant 0
 pop local 1
-label label9
+label label21
 push local 1
 not
 not
-if-goto label10
-label label11
+if-goto label22
+label label23
 push local 0
 push constant 0
 eq
 not
-if-goto label12
+if-goto label24
 call Keyboard.keyPressed 0
 pop local 0
 push pointer 0
 call SquareGame.moveSquare 1
 pop temp 0
-goto label11
-label label12
+goto label23
+label label24
 push local 0
 push constant 81
 eq
 not
-if-goto label13
+if-goto label25
 push constant 1
 neg
 pop local 1
-label label13
+label label25
 push local 0
 push constant 90
 eq
 not
-if-goto label15
+if-goto label27
 push this 0
 call Square.decSize 1
 pop temp 0
-label label15
+label label27
 push local 0
 push constant 88
 eq
 not
-if-goto label17
+if-goto label29
 push this 0
 call Square.incSize 1
 pop temp 0
-label label17
+label label29
 push local 0
 push constant 131
 eq
 not
-if-goto label19
+if-goto label31
 push constant 1
 pop this 1
-label label19
+label label31
 push local 0
 push constant 133
 eq
 not
-if-goto label21
+if-goto label33
 push constant 2
 pop this 1
-label label21
+label label33
 push local 0
 push constant 130
 eq
 not
-if-goto label23
+if-goto label35
 push constant 3
 pop this 1
-label label23
+label label35
 push local 0
 push constant 132
 eq
 not
-if-goto label25
+if-goto label37
 push constant 4
 pop this 1
-label label25
-label label27
+label label37
+label label39
 push local 0
 push constant 0
 eq
 not
 not
-if-goto label28
+if-goto label40
 call Keyboard.keyPressed 0
 pop local 0
 push pointer 0
 call SquareGame.moveSquare 1
 pop temp 0
-goto label27
-label label28
-goto label9
-label label10
+goto label39
+label label40
+goto label21
+label label22
 push constant 0
 return

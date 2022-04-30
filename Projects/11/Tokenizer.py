@@ -117,9 +117,18 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("input", default=None, type=str,
                         help="Path to a .jack file or a directory containing at least one .jack file")
+    # args = parser.parse_args('./Seven/Main.jack'.split())
+    # args = parser.parse_args('./ConvertToBin/Main.jack'.split())
+    # args = parser.parse_args('./Square/Main.jack'.split())
+    # args = parser.parse_args('./Square/Square.jack'.split())
+    # args = parser.parse_args('./Square/SquareGame.jack'.split())
+    # args = parser.parse_args('./Average/Main.jack'.split())
+    # args = parser.parse_args('./Pong/Main.jack'.split())
+    # args = parser.parse_args('./Pong/Ball.jack'.split())
+    # args = parser.parse_args('./Pong/Bat.jack'.split())
+    # args = parser.parse_args('./Pong/PongGame.jack'.split())
     args = parser.parse_args('./ComplexArrays/Main.jack'.split())
-    # args = parser.parse_args()
-    # print(f"Input: {args.input}")
+    print(f"Input: {args.input}")
 
     jack_files = []
     if os.path.isdir(args.input):

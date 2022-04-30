@@ -90,12 +90,12 @@ return
 function PongGame.run 1
 push argument 0
 pop pointer 0
-label label1
+label label35
 push this 3
 not
 not
-if-goto label2
-label label3
+if-goto label36
+label label37
 push local 0
 push constant 0
 eq
@@ -103,7 +103,7 @@ push this 3
 not
 and
 not
-if-goto label4
+if-goto label38
 call Keyboard.keyPressed 0
 pop local 0
 push this 0
@@ -115,42 +115,42 @@ pop temp 0
 push constant 50
 call Sys.wait 1
 pop temp 0
-goto label3
-label label4
+goto label37
+label label38
 push local 0
 push constant 130
 eq
 not
-if-goto label5
+if-goto label39
 push this 0
 push constant 1
 call Bat.setDirection 2
 pop temp 0
-goto label6
-label label5
+goto label40
+label label39
 push local 0
 push constant 132
 eq
 not
-if-goto label7
+if-goto label41
 push this 0
 push constant 2
 call Bat.setDirection 2
 pop temp 0
-goto label8
-label label7
+goto label42
+label label41
 push local 0
 push constant 140
 eq
 not
-if-goto label9
+if-goto label43
 push constant 1
 neg
 pop this 3
-label label9
-label label8
-label label6
-label label11
+label label43
+label label42
+label label40
+label label45
 push local 0
 push constant 0
 eq
@@ -159,7 +159,7 @@ push this 3
 not
 and
 not
-if-goto label12
+if-goto label46
 call Keyboard.keyPressed 0
 pop local 0
 push this 0
@@ -171,13 +171,13 @@ pop temp 0
 push constant 50
 call Sys.wait 1
 pop temp 0
-goto label11
-label label12
-goto label1
-label label2
+goto label45
+label label46
+goto label35
+label label36
 push this 3
 not
-if-goto label13
+if-goto label47
 push constant 10
 push constant 27
 call Output.moveCursor 2
@@ -204,7 +204,7 @@ push constant 114
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
-label label13
+label label47
 push constant 0
 return
 function PongGame.moveBall 5
@@ -222,7 +222,7 @@ eq
 not
 and
 not
-if-goto label15
+if-goto label49
 push this 2
 pop this 5
 push constant 0
@@ -243,7 +243,7 @@ push this 2
 push constant 4
 eq
 not
-if-goto label17
+if-goto label51
 push local 1
 push local 4
 gt
@@ -255,30 +255,30 @@ pop this 3
 push this 3
 not
 not
-if-goto label19
+if-goto label53
 push local 4
 push local 1
 push constant 10
 add
 lt
 not
-if-goto label21
+if-goto label55
 push constant 1
 neg
 pop local 0
-goto label22
-label label21
+goto label56
+label label55
 push local 3
 push local 2
 push constant 10
 sub
 gt
 not
-if-goto label23
+if-goto label57
 push constant 1
 pop local 0
-label label23
-label label22
+label label57
+label label56
 push this 6
 push constant 2
 sub
@@ -298,12 +298,12 @@ pop temp 0
 push this 4
 call Output.printInt 1
 pop temp 0
-label label19
-label label17
+label label53
+label label51
 push this 1
 push local 0
 call Ball.bounce 2
 pop temp 0
-label label15
+label label49
 push constant 0
 return

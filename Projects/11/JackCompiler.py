@@ -31,7 +31,7 @@ if __name__ == '__main__':
     for jack_file in jack_files:
         temp_file = jack_file.replace(".jack", "_temp.xml")
         temp_files.append(temp_file)
-        out_file = jack_file.replace(".jack", ".xml")
+        out_file = jack_file.replace(".jack", ".vm")
         out_files.append(out_file)
         tokenizer(jack_file)
 
@@ -44,26 +44,25 @@ if __name__ == '__main__':
 
         # Read tokenized file and extract xml tags & contents into the 2 following lists
         lines = []
-        tag_list = []
+        tags = []
         with open(temp_file, "r") as f:
             # Retrieve the text content of XML
             for line in f:
                 tag = re.findall("^<[^<>]+>", line)[0][1:-1]
                 # Remove start tag
-                line = re.sub("^<[^<>]+>[ ]*", "", line)
+                line = re.sub("^<[^<>]+>[ ]?", "", line)
                 # Remove end tag
-                line = re.sub("[ ]*<[^<>]+>\n$", "", line)
+                line = re.sub("[ ]?<[^<>]+>\n$", "", line)
                 # Remove empty lines
                 if line != "\n" and line != "":
                     lines.append(line)
                     assert tag in {"keyword", "identifier", "symbol", "stringConstant", "integerConstant"}
-                    tag_list.append(tag)
+                    tags.append(tag)
 
         # Remove temp file
         os.system(f"rm {temp_file}")
 
         # Parse file
         pos = -1
-        assert lines[pos + 1] == "class"
         with open(out_file, "a") as out_file:
-            class_handler(lines, tag_list, pos, out_file)
+            class_handler(lines, tags, pos, out_file)
