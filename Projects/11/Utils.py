@@ -26,7 +26,6 @@ operators = {
 unary_operators = {
     "-": "neg",
     "~": "not",
-    # "&lt;": "lt"
 }
 
 # Syntax = keyword_constant: corresponding vm code
