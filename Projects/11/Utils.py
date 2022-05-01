@@ -29,5 +29,9 @@ unary_operators = {
 }
 
 # Syntax = keyword_constant: corresponding vm code
-keyword_constants = {"true": "push constant 1\nneg", "false": "push constant 0",
-                     "null": "push constant 0", "this": "push pointer 0"}
+keyword_constants = {
+    "true": "push constant 1\nneg",
+    "false": "push constant 0",
+    "null": "push constant 0",
+    "this": "push pointer 0"
+}
