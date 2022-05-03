@@ -16,11 +16,19 @@
  */
 class Output {
 
+    // Coordinates of the cursor
+    static int cursor_i, cursor_j;
     // Character map for displaying characters
-    static Array charMaps; 
+    static Array charMaps;
+    static int screen_base_address;
 
     /** Initializes the screen, and locates the cursor at the screen's top-left. */
     function void init() {
+        let cursor_i = 0;
+        let cursor_j = 0;
+        let screen_base_address = 16384;
+        do Output.initMap();
+        return;
     }
 
     // Initializes the character map array
@@ -32,7 +40,7 @@ class Output {
         // Black square, used for displaying non-printable characters.
         do Output.create(0,63,63,63,63,63,63,63,63,63,0,0);
 
-        // Assigns the bitmap for each character in the charachter set.
+        // Assigns the bitmap for each character in the character set.
         // The first parameter is the character index, the next 11 numbers
         // are the values of each row in the frame that represents this character.
         do Output.create(32,0,0,0,0,0,0,0,0,0,0,0);          //
@@ -176,28 +184,104 @@ class Output {
     /** Moves the cursor to the j-th column of the i-th row,
      *  and erases the character displayed there. */
     function void moveCursor(int i, int j) {
+        var int word_address;
+        var int counter;
+
+        let cursor_i = i;
+        let cursor_j = j;
+        // The current word is initialized to be the first 16-bit word constituting the character
+        let word_address = screen_base_address + 64 * 11 * i + 11 * j;
+        let counter = 0;
+
+        // Erase the character at (i, j)
+        while (counter < 11) {
+            do Memory.poke(word_address, 0);
+            let word_address = word_address + 64;
+            let counter = counter + 1;
+        }
+
+        return;
     }
 
     /** Displays the given character at the cursor location,
      *  and advances the cursor one column forward. */
     function void printChar(char c) {
+        var int word_address;
+        var int counter;
+        var Array char_map;
+
+        // The current word is initialized to be the first 16-bit word constituting the character
+        let word_address = screen_base_address + 64 * 11 * cursor_i + 11 * cursor_j;
+        let counter = 0;
+        let char_map = Output.getMap(c);
+
+        // Erase print character c at position (i, j)
+        while (counter < 11) {
+            do Memory.poke(word_address, char_map[counter]);
+            let word_address = word_address + 64;
+            let counter = counter + 1;
+        }
+
+        // Update the cursor position
+        if (cursor_j < 63) {
+            let cursor_j = cursor_j + 1;
+        }
+        else {  // cursor_j = 63
+            let cursor_i = cursor_i + 1;
+            let cursor_j = 0;
+        }
+
+        return;
     }
 
     /** displays the given string starting at the cursor location,
      *  and advances the cursor appropriately. */
     function void printString(String s) {
+        var int nb_char;
+        var int i;
+
+        let nb_char = s.length();
+        let i = 0;
+
+        while (i < nb_char) {
+            do Output.printChar(s.charAt(i));
+            let i = i + 1;
+        }
+
+        return;
     }
 
     /** Displays the given integer starting at the cursor location,
      *  and advances the cursor appropriately. */
     function void printInt(int i) {
+        var String str;
+
+        // Input transformed to string
+        let str = String.new(5);
+        do str.setInt(i);
+
+        do Output.printString(str);
+
+        return;
     }
 
     /** Advances the cursor to the beginning of the next line. */
     function void println() {
+        do Output.moveCursor(cursor_i + 1, 0);
+        return;
     }
 
     /** Moves the cursor one column back. */
     function void backSpace() {
+        var int new_cursor_i, new_cursor_j;
+
+        if (cursor_j > 0) {
+            do Output.moveCursor(cursor_i, cursor_j - 1);
+        }
+        else {  // cursor_j = 0
+            do Output.moveCursor(cursor_i - 1, 63);
+        }
+
+        return;
     }
 }

@@ -1,0 +1,192 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Math.jack
+
+/**
+ * A library of commonly used mathematical functions.
+ * Note: Jack compilers implement multiplication and division using OS method calls.
+ */
+class Math {
+
+    // Syntax: lookup_table[i] = b_i in 2's complement, where b_i is a 16-bit value with only the i-th bit equals to 1.
+    static Array lookup_table;
+
+    /** Initializes the library. */
+    function void init() {
+        let lookup_table = Array.new(16);
+        let lookup_table[0] = 1;
+        let lookup_table[1] = 2;
+        let lookup_table[2] = 4;
+        let lookup_table[3] = 8;
+        let lookup_table[4] = 16;
+        let lookup_table[5] = 32;
+        let lookup_table[6] = 64;
+        let lookup_table[7] = 128;
+        let lookup_table[8] = 256;
+        let lookup_table[9] = 512;
+        let lookup_table[10] = 1024;
+        let lookup_table[11] = 2048;
+        let lookup_table[12] = 4096;
+        let lookup_table[13] = 8192;
+        let lookup_table[14] = 16384;
+        let lookup_table[15] = 16384 + 16384;
+        return;
+    }
+
+    /** Returns the absolute value of x. */
+    function int abs(int x) {
+        if (x < 0) {
+            let x = -x;
+        }
+        return x;
+    }
+
+    /** Returns the product of x and y. 
+     *  When a Jack compiler detects the multiplication operator '*' in the 
+     *  program's code, it handles it by invoking this method. In other words,
+     *  the Jack expressions x*y and multiply(x,y) return the same value.
+     */
+    function int multiply(int x, int y) {
+        var int sum, power;  // power = 2^j
+        var int shifted_x;
+        var int i;
+        var int j;  // j = log_2^y rounds up to next integer
+
+        let sum = 0;
+        let shifted_x = x;
+        let i = 0;
+
+        while (i < 16) {
+            // If the i-th smallest bit of y is 1
+            if (Math.ith_smallest_bit(y, i)) {
+                let sum = sum + shifted_x;
+            }
+
+            // Shift x
+            let shifted_x = shifted_x + shifted_x;
+        }
+
+        return sum;
+    }
+
+    /** Helper function to get the i-th smallest bit of an integer */
+    function boolean ith_smallest_bit(int x, int i) {
+        return ~((x & lookup_table[i]) = 0);
+    }
+
+    /** Returns the integer part of x/y.
+     *  When a Jack compiler detects the multiplication operator '/' in the 
+     *  program's code, it handles it by invoking this method. In other words,
+     *  the Jack expressions x/y and divide(x,y) return the same value.
+     */
+    function int divide(int x, int y) {
+        var int sign, sign_y;
+        var int q;
+
+        // Treatment of the special case where y = 0
+        if (y = 0) {
+            do Output.printString("The y in x/y should be different from zero !");
+            do Sys.halt();
+        }
+
+        // Treatment of the special case where x = -32768 and y != -32768
+        if ((x = -16384 - 16384) & (~(y = -16384 - 16384))) {
+            // Same logic as below
+            let sign_y = (y < 0);
+            let sign_y = -2 * sign_y - 1;
+
+            let y = Math.abs(y);
+            // Notice that the first argument becomes x + y where y > 0,
+            // meaning that it is no longer equal to -32768
+            return sign_y * ((x + y) / y - 1);
+        }
+
+        // Get the result's sign, which is 1 (positive) or -1 (negative)
+        let sign = ((x < 0) = (y < 0));  // Here sign = -1 (positive) or 0 (negative)
+        let sign = -2 * sign - 1;  // Map -1 to 1 and 0 to -1
+
+        let x = Math.abs(x);
+        let y = Math.abs(y);
+
+        if (y > x) {return 0; }
+        // If y < 0, i.e. y = -32768 before and after Math.abs
+        if (y < 0) {
+            // If x < 0, i.e. x = -32768 before and after Math.abs
+            if (x < 0) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        }
+
+        let q = x / (y + y);
+        if ((x - 2 * q * y) < y) {return (q + q) * sign;}
+        else {return (q + q + 1) * sign;}
+    }
+
+    /** Returns the integer part of the square root of x. */
+    function int sqrt(int x) {
+        var int res;
+        var int i;  // Bit index
+
+        // Treatment of the special case where x < 0
+        if (x < 0) {
+            do Output.printString("Cannot compute the square root of a negative number !");
+            do Sys.halt();
+        }
+
+        // nb_bits(res) = nb_bits(x) / 2 or nb_bits(x) / 2 + 1,
+        // so the index of MSB(res) is [the index of MSB(x) / 2] or [the index of MSB(x) / 2 - 1].
+        // This means that the search should begin at bit Math.index_MSB(x) / 2
+        let res = 0;
+        let i = Math.index_MSB(x) / 2;
+        // While i >= 0
+        while (~(i < 0)) {
+            if (~((res + lookup_table[i]) * (res + lookup_table[i])) > x) {
+                let res = res + lookup_table[i];
+            }
+        }
+
+        return res;
+    }
+
+    /** Helper function to compute floor(log_2^x) for x > 0 or 0 if x = 0
+    Note: this is equal to the index of MSB(x). For example when x = 8 = 1000, index(MSB(x)) = 3 */
+    function int index_MSB(int x) {
+        var int res;
+        var int power;  // power = 2^res
+
+        // Treatment of the special case where x < 0
+        if (x < 0) {
+            do Output.printString("Cannot calculate the logarithm of a number that is not > 0!");
+            do Sys.halt();
+        }
+
+        // Treatment of the special case where x = 0
+        if (x = 0) {return 0; }
+
+        let res = 0;
+        let power = 1;
+
+        // While power <= x
+        while (~(power > x)) {
+            let res = res + 1;
+            let power = power + power;
+        }
+        return res - 1;
+    }
+
+    /** Returns the greater number. */
+    function int max(int a, int b) {
+        if (a > b) {return a;}
+        else {return b;}
+    }
+
+    /** Returns the smaller number. */
+    function int min(int a, int b) {
+        if (a < b) {return a;}
+        else {return b;}
+    }
+}

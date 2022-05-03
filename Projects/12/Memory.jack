@@ -10,21 +10,29 @@
  */ 
 class Memory {
 
+    static Array ram;
+
     /** Initializes the class. */
     function void init() {
+        let ram = 0;
+        return;
     }
 
     /** Returns the RAM value at the given address. */
     function int peek(int address) {
+        return ram[address];
     }
 
     /** Sets the RAM value at the given address to the given value. */
     function void poke(int address, int value) {
+        let ram[address] = value;
+        return;
     }
 
     /** Finds an available RAM block of the given size and returns
      *  a reference to its base address. */
     function int alloc(int size) {
+
     }
 
     /** De-allocates the given object (cast as an array) by making
