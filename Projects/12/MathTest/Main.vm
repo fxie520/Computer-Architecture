@@ -1,4 +1,4 @@
-function Main.main 1
+function Main.main 2
 push constant 8000
 pop local 0
 push constant 0
@@ -11,6 +11,15 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push constant 0
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
 push constant 1
 push local 0
 add
@@ -26,6 +35,15 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push constant 1
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
 push constant 2
 push local 0
 add
@@ -40,6 +58,15 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push constant 2
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
 push constant 3
 push local 0
 add
@@ -54,6 +81,15 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push constant 3
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
 push constant 4
 push local 0
 add
@@ -68,6 +104,15 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push constant 4
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
 push constant 5
 push local 0
 add
@@ -78,6 +123,15 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push constant 5
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
 push constant 6
 push local 0
 add
@@ -89,6 +143,15 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push constant 6
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
 push constant 7
 push local 0
 add
@@ -100,6 +163,15 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push constant 7
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
 push constant 8
 push local 0
 add
@@ -109,6 +181,15 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push constant 8
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
 push constant 9
 push local 0
 add
@@ -118,6 +199,15 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push constant 9
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
 push constant 10
 push local 0
 add
@@ -158,5 +248,41 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push constant 10
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
+push constant 11
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
+push constant 12
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
+push constant 13
+push local 0
+add
+pop pointer 1
+push that 0
+call Output.printInt 1
+pop temp 0
+call Output.println 0
+pop temp 0
 push constant 0
 return

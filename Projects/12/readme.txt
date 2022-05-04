@@ -1,0 +1,1 @@
+Many OS functions can and needs to be further optimized to make applications like Pong run smoothly.

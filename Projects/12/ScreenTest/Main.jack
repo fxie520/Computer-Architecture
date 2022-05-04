@@ -6,7 +6,7 @@
 /** Test program for the OS Screen class. */
 class Main {
 
-    /** Draws a sample pictue on the screen using lines and circles. */
+    /** Draws a sample picture on the screen using lines and circles. */
     function void main() {
     
         do Screen.drawLine(0,220,511,220);        // base line

@@ -1,0 +1,88 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Memory.jack
+
+/**
+ * This library provides two services: direct access to the computer's main
+ * memory (RAM), and allocation and recycling of memory blocks. The Hack RAM
+ * consists of 32,768 words, each holding a 16-bit binary number.
+ */ 
+class Memory {
+
+    // Base address of the RAM
+    static Array ram;
+    // Base address of the heap
+    static Array heap;
+    // Base address of the last block in the linked list
+    static Array last_block;
+
+    /** Initializes the class. */
+    function void init() {
+        let ram = 0;
+
+        // Initialize the heap
+        let heap = 2048;
+        let heap[0] = null;  // Next block address = null means end of linked list
+        let heap[1] = 16384 - heap;
+
+        let last_block = heap;
+        return;
+    }
+
+    /** Returns the RAM value at the given address. */
+    function int peek(int address) {
+        return ram[address];
+    }
+
+    /** Sets the RAM value at the given address to the given value. */
+    function void poke(int address, int value) {
+        let ram[address] = value;
+        return;
+    }
+
+    /** Finds an available RAM block of the given size and returns
+     *  a reference to its base address. Algorithm: first fit. */
+    function int alloc(int size) {
+        var Array current_block, next_block;
+        var int current_block_size;
+
+        let current_block = heap;
+        let next_block = current_block[0];
+        let current_block_size = current_block[1];
+
+        // While the current block isn't large enough and we have not reached the end of the linked list,
+        // goes to the next block
+        while ((size + 3 > current_block_size) & ~(next_block = null)) {
+            let current_block = next_block;
+            let next_block = current_block[0];
+            let current_block_size = current_block[1];
+        }
+
+        // The current block is good
+        if (~(size + 3 > current_block_size)) {
+            // Rewrite current block's size
+            let current_block[1] = current_block_size - size - 1;
+            // let newly_allocated_block[-1] = size. This is useful during de-allocation.
+            let current_block[current_block_size - size - 1] = size;
+            return current_block + current_block_size - size;
+        }
+        // We have reached the end of the linked list
+        else {
+            do Output.printString("No memory block is large enough for allocation !");
+            do Sys.halt();
+            return 0;
+        }
+    }
+
+    /** De-allocates the given object (cast as an array) by making
+     *  it available for future allocations. No measure is taken to de-fragment the heap. */
+    function void deAlloc(Array o) {
+        // Append object to the end of the linked list
+        let last_block[0] = o;
+        let o[0] = null;
+        let o[1] = o[-1];
+
+        return;
+    }
+}

@@ -9,26 +9,56 @@ class Main {
     /** Performs various mathematical operations, using calls to the Math class methods. */
     function void main() {
         var Array r;          // stores the test results;
+        var int i;
         
         let r = 8000;
     
         let r[0] = 2 * 3;                  // 6
+        do Output.printInt(r[0]);
+        do Output.println();
         let r[1] = r[0] * (-30);           // 6 * (-30) = -180
+        do Output.printInt(r[1]);
+        do Output.println();
         let r[2] = r[1] * 100;             // (-180) * 100 = -18000
+        do Output.printInt(r[2]);
+        do Output.println();
         let r[3] = 1 * r[2];               // 1 * (-18000) = -18000
+        do Output.printInt(r[3]);
+        do Output.println();
         let r[4] = r[3] * 0;               // 0
+        do Output.printInt(r[4]);
+        do Output.println();
         
         let r[5] = 9 / 3;                  // 3
+        do Output.printInt(r[5]);
+        do Output.println();
         let r[6] = (-18000) / 6;           // -3000
+        do Output.printInt(r[6]);
+        do Output.println();
         let r[7] = 32766 / (-32767);       // 0
+        do Output.printInt(r[7]);
+        do Output.println();
         
         let r[8] = Math.sqrt(9);           // 3
+        do Output.printInt(r[8]);
+        do Output.println();
         let r[9] = Math.sqrt(32767);       // 181
+        do Output.printInt(r[9]);
+        do Output.println();
         
         let r[10] = Math.min(345, 123);    // 123
         let r[11] = Math.max(123, -345);   // 123
         let r[12] = Math.abs(27);          // 27
         let r[13] = Math.abs(-32767);      // 32767
+
+        do Output.printInt(r[10]);
+        do Output.println();
+        do Output.printInt(r[11]);
+        do Output.println();
+        do Output.printInt(r[12]);
+        do Output.println();
+        do Output.printInt(r[13]);
+        do Output.println();
 
         return;
     }
